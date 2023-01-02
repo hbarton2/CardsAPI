@@ -33,17 +33,27 @@ class Deck:
         self.cards.remove(drawn)
         return drawn
 
-    def deal(self, people, hand_size):
+    def __init_players__(self, people):
+        players = []
+        for i in range(people):
+            deck = Deck()
+            deck.cards.append(self.cards.pop())
+            players.append(deck)
+        return players
+
+    def deal(self, people, hand_size): #won't deal more cards than there are in the deck
         if people * hand_size <= len(self.cards):
-            players = []
-            for i in range(people):
-                deck = Deck()
-                deck.cards.append(self.cards.pop())
-                players.append(deck)
+            players = self.__init_players__(people)
             for x in range(1, hand_size):
                 for player in players:
                     player.cards.append(self.cards.pop())
             return players
+
+    def deal_all(self, people):
+        players = self.__init_players__(people)
+        while len(self.cards) > 0:
+            for player in players:
+                player.cards.append(self.cards.pop())
 
 
 def init52(deck):
